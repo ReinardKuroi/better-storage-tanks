@@ -17,7 +17,7 @@ Liquid = {
 
 liquid_transfer = Liquid:new()
 tank_had_fluid = false
-debug_flag = false
+debug_flag = true
 player_transfer = nil
 debug_items = {{name = "wooden-chest", count = 1},
 	{name = "iron-axe", count = 1},
