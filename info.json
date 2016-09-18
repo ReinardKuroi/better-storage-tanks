@@ -1,0 +1,8 @@
+{
+"name": "better-storage-tanks",
+"version": "0.1.0",
+"factorio_version" : "0.13",
+"title": "Better Storage Tanks",
+"author": "ReinardKuroi",
+"description": "Pick up a storage tank without dumping it's contents!"
+}
