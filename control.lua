@@ -57,6 +57,7 @@ script.on_event(defines.events.on_preplayer_mined_item, function(event)
 			entity_surface = entity.surface.index
 			liquid_transfer = Liquid:new(fluid)
 			liquid_transfer.amount = math.floor(liquid_transfer.amount)
+			entity.fluidbox[1] = nil
 		end
 	else tank_had_fluid = false end
 end)
