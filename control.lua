@@ -28,7 +28,9 @@ script.on_event(defines.events.on_built_entity, function(event)
 			entity.fluidbox[1] = liquid_transfer
 			tank_had_fluid = false
 		end
-		player_transfer.cursor_stack.count = player_transfer.cursor_stack.count - 1	
+		if player_transfer.cursor_stack.valid_for_read then
+			player_transfer.cursor_stack.count = player_transfer.cursor_stack.count - 1
+		end
 	end
 end)
 
