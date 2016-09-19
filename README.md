@@ -1,6 +1,6 @@
 # Better Storage Tanks
 
-**Version: 0.2.0**
+**Version: 0.2.1**
 
 **Short description:**
 
@@ -14,3 +14,4 @@ In vanilla, when you mine a storage tank, you just get the storage tank. Whateve
  - 0.1.0 First upload, no public testing yet
  - 0.1.1 Debug flag set to false
  - 0.2.0 Rebuilt handler for Storage Tank mining, now you can't mine stuff with full inventory. Fixed a bug with "ghost item" in hand
+ - 0.2.1 Added icon generator. Looks meh, but whatever. Fixed another "ghost item" in hand bug
