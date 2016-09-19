@@ -90,3 +90,38 @@ script.on_event(defines.events.on_player_mined_item, function(event)
 		tank_had_fluid = false
 	end
 end)
+
+script.on_event(defines.events.on_tick, function(event)
+	if event.tick % 20 ~= 0 then
+		for i,player in pairs(game.players) do
+			local gui = player.gui.top
+			if player.opened and player.opened.name == 'storage-tank' and player.opened.fluidbox[1] ~= nil and math.floor(player.opened.fluidbox[1].amount) > 0 then
+				local fluid = player.opened.fluidbox[1]
+				if gui.dumpcontents == nil then -- if it doesn't exits, create GUI with one button
+					gui.add({type = "frame", direction="vertical", name = "dumpcontents"})
+					gui.dumpcontents.add({type = "frame", name = "info"})
+					gui.dumpcontents.info.add({type = "label", name = "n"})
+					gui.dumpcontents.info.add({type = "label", name = "a"})
+					gui.dumpcontents.info.caption = ("Storage tank contents:")
+					gui.dumpcontents.add({type = "button", name = "dump"})
+					gui.dumpcontents.dump.caption = ("Dump contents")
+				else
+					gui.dumpcontents.info.n.caption = ("Name: "..string.upper(fluid.type))
+					gui.dumpcontents.info.a.caption = (" Amount: "..math.floor(fluid.amount))
+				end
+			else --delete GUI
+				if gui.dumpcontents ~= nil then
+					gui.dumpcontents.destroy()
+				end
+			end
+		end
+	end
+end)
+
+script.on_event(defines.events.on_gui_click, function(event)
+	local player = game.players[event.player_index]
+	local element = event.element
+	if element.name == "dump" then
+		player.opened.fluidbox[1] = nil
+	end
+end)
