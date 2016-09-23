@@ -1,6 +1,6 @@
 # Better Storage Tanks
 
-**Version: 0.3.0**
+**Version: 0.3.1**
 
 **Short description:**
 
@@ -19,3 +19,4 @@ Now there is also a GUI button that dumps all contents of the storage tank.
  - 0.2.2 Added GUI that allows to dump contents of the storage tank
  - 0.2.3 Now liquid is properly removed from the entity before it is mined. No longer duplicates liquids in the system
  - 0.3.0 Rebuilt handler AGAIN. Now it's less spaghetti and more code! Removed various bugs. Construction bots finally can properly place EMPTY Storage Tanks in blueprints (they used to use crude oil tanks because alphabet and reasons). Health is properly retained through mining and placing the storage tank.
+ - 0.3.1 Fixed crash on attempt to mine storage tank with filtered quickbar
