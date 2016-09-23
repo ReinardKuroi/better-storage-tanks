@@ -21,4 +21,4 @@ Now there is also a GUI button that dumps all contents of the storage tank.
  - 0.3.0 Rebuilt handler AGAIN. Now it's less spaghetti and more code! Removed various bugs. Construction bots finally can properly place EMPTY Storage Tanks in blueprints (they used to use crude oil tanks because alphabet and reasons). Health is properly retained through mining and placing the storage tank.
  - 0.3.1 Fixed crash on attempt to mine storage tank with filtered quickbar
  - 0.3.2 Removed some silly code. Bots can't mine non-empty tanks anymore.
- - 0.3.3 Added new data table, I should prevent issues with multiplayer (if there was any)
+ - 0.3.3 Added new data table, it should prevent issues with multiplayer (if there was any)
