@@ -97,15 +97,13 @@ script.on_event(defines.events.on_robot_pre_mined, function(event)
 		entity.fluidbox[1] = nil
 	else tank_had_fluid = false end
 end)
---]]
---[[
+
 script.on_event(defines.events.on_robot_mined, function(event)
 	local item = event.robot.get_inventory(1)[1]
 	local inv = event.robot.get_inventory(1)
 	for k, v in pairs(inv.get_contents()) do
 		game.players[1].print('name = '..k..', count = '..v)
 	end
-	--[[
 	if tank_had_fluid and item then
 		local itemStack = {}
 		itemStack.name = entity_transfer.fluidbox.type.."-storage-tank"
@@ -117,7 +115,6 @@ script.on_event(defines.events.on_robot_mined, function(event)
 		game.players[1].print(item.name..", "..item.durability)
 		tank_had_fluid = false
 	end
-	--]]
 end)
 --]]
 
