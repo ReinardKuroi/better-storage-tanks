@@ -8,7 +8,7 @@ for k, v in pairs(data.raw["fluid"]) do
 	data:extend({
    {
     type = "tool",
-    name = v.name.."-storage-tank",
+    name = "storage-tank-"..v.name,
 	localised_name = {"item-name.pocket-tank", {"fluid-name." .. v.name}},	
 	icons = {
 		{
@@ -26,7 +26,7 @@ for k, v in pairs(data.raw["fluid"]) do
     
     flags = {"goes-to-quickbar"},
     subgroup = "storage",
-    order = "b[fluid]-a[storage-tank]",
+    order = "b[fluid]-b[storage-tank]",
     place_result = "storage-tank",
 	stack_size = 1,
     stackable = false,
