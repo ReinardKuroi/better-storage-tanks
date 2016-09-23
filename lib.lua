@@ -2,6 +2,8 @@ require "util"
 
 --					New class for copying various entity parameters. Currently, standart deepcopy breaks Factorio
 
+DataTable = {}
+
 MyEntity = {
 	name = "",
 	position = {},

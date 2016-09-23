@@ -9,19 +9,21 @@ script.on_event(defines.events.on_preplayer_mined_item, function(event)
 	if entity.name == "storage-tank" then
 		local fluid = entity.fluidbox[1]
 		if fluid and math.floor(fluid.amount) > 0 then
-			tank_had_fluid = true
-			entity_transfer = MyEntity:new()
+			local entity_transfer = MyEntity:new()
 			entity_transfer:copy(entity)
+			DataTable[event.player_index] = entity_transfer
 		end
 		entity.fluidbox[1] = nil
-	else tank_had_fluid = false end
+	end
 end)
 
 script.on_event(defines.events.on_player_mined_item, function(event)
 	local player = game.players[event.player_index]
 	local inv = player.get_inventory(defines.inventory.player_main)
 	local quick = player.get_inventory(defines.inventory.player_quickbar)
-	if tank_had_fluid == true then
+	local entity_transfer = DataTable[event.player_index]
+	DataTable[event.player_index] = nil
+	if entity_transfer then
 		if checkInv(quick) then
 			if not removeItem(quick) then removeItem(inv) end
 			addItem(quick, entity_transfer)
@@ -43,7 +45,6 @@ script.on_event(defines.events.on_player_mined_item, function(event)
 			replaceEntity(entity_transfer)
 			player.print("Cannot insert "..entity_transfer.fluidbox.type.." Storage Tank. Player's inventory full. Deconstruction cancelled.")
 		end
-		tank_had_fluid = false
 	end
 end)
 
@@ -55,11 +56,12 @@ script.on_event(defines.events.on_put_item, function(event)
 	if item.valid_for_read then
 		if string.find(item.name, "storage-tank", 1, true) then
 			if string.len(item.name) > string.len("storage-tank") then
-				entity_transfer = MyEntity:new()
+				local entity_transfer = MyEntity:new()
 				tank_had_fluid = true
 				entity_transfer.fluidbox.type = string.sub(item.name, string.len("storage-tank")+2, string.len(item.name))
 				entity_transfer.fluidbox.amount = item.durability
 				entity_transfer.health = math.floor(item.health*500)
+				DataTable[event.player_index] = entity_transfer
 			end
 		end
 	end
@@ -68,10 +70,11 @@ end)
 script.on_event(defines.events.on_built_entity, function(event)
 	local entity = event.created_entity
 	local player = game.players[event.player_index]
+	local entity_transfer = DataTable[event.player_index]
+	DataTable[event.player_index] = nil
 	if entity.name == "storage-tank" then
-		if tank_had_fluid == true then
+		if entity_transfer then
 			entity.fluidbox[1] = entity_transfer.fluidbox
-			tank_had_fluid = false
 			entity.health = entity_transfer.health
 			if player.cursor_stack.valid_for_read then
 				player.cursor_stack.count = player.cursor_stack.count - 1
