@@ -64,7 +64,20 @@ function checkInv(inv, name)
 	end
 	return false
 end
+--[[
+--					Checks if tanks were merged to avoid unnecessary deletion
 
+function cleanInv(player, entity, name)
+	local name = name or "storage-tank-"
+	local quick = player.get_inventory(defines.inventory.player_quickbar)
+	local inv = player.get_inventory(defines.inventory.player_main)
+	local item = quick.find_item_stack(name..entity.fluidbox.type) or inv.find_item_stack(name..entity.fluidbox.type)
+	if not (item or item.durability + entity.fluidbox.amount <= 2500) then
+		if not removeItem(quick) then removeItem(inv) end
+		return true
+	end
+end
+--]]
 --					Deletes c items with name from inventory, returns true if successful
 
 function removeItem(inv, name, c)
@@ -72,7 +85,7 @@ function removeItem(inv, name, c)
 	local c = c or 1
 	for i = #inv, 1, -1 do
 		if inv[i].valid_for_read and inv[i].name == name then
-			inv[i].count = inv[i].count - 1
+			inv[i].count = inv[i].count - c
 			return true
 		end
 	end

@@ -28,7 +28,7 @@ script.on_event(defines.events.on_player_mined_item, function(event)
 		elseif checkInv(inv) then
 			if not removeItem(quick) then removeItem(inv) end
 			addItem(inv, entity_transfer)
-		elseif quick.find_item_stack("storage-tank") == nil and inv.find_item_stack("storage-tank") == nil then
+		elseif not (quick.find_item_stack("storage-tank") or inv.find_item_stack("storage-tank")) then
 			if player.cursor_stack.valid_for_read and player.cursor_stack.name == "storage-tank" then
 				player.cursor_stack.count = player.cursor_stack.count - 1
 				replaceEntity(entity_transfer)
@@ -60,7 +60,6 @@ script.on_event(defines.events.on_put_item, function(event)
 				entity_transfer.fluidbox.type = string.sub(item.name, string.len("storage-tank")+2, string.len(item.name))
 				entity_transfer.fluidbox.amount = item.durability
 				entity_transfer.health = math.floor(item.health*500)
-				player_transfer = player
 			end
 		end
 	end
@@ -68,21 +67,34 @@ end)
 
 script.on_event(defines.events.on_built_entity, function(event)
 	local entity = event.created_entity
+	local player = game.players[event.player_index]
 	if entity.name == "storage-tank" then
 		if tank_had_fluid == true then
 			entity.fluidbox[1] = entity_transfer.fluidbox
 			tank_had_fluid = false
 			entity.health = entity_transfer.health
-			if player_transfer.cursor_stack.valid_for_read then
-				player_transfer.cursor_stack.count = player_transfer.cursor_stack.count - 1
+			if player.cursor_stack.valid_for_read then
+				player.cursor_stack.count = player.cursor_stack.count - 1
 			end
 		end
 	end
 end)
 
---[[
+--					This runs when you order deconstruction on a non-empty storage tank - this is a makeshift code
+
+script.on_event(defines.events.on_marked_for_deconstruction, function(event)
+	local entity = event.entity
+	local player = game.players[event.player_index]
+	local fluid = entity.fluidbox[1]
+	if entity.name == "storage-tank" and fluid and math.floor(fluid.amount) > 0 then
+		entity.cancel_deconstruction(player.force)
+		player.print(string.format("Cannot deconstruct: Storage Tank has %d units of %s.", fluid.amount, fluid.type))
+	end
+end)
+
 --					This runs when a construction bot tries to pick up a storage tank.
 
+--[[
 script.on_event(defines.events.on_robot_pre_mined, function(event)
 	local bot = event.robot
 	local entity = event.entity
@@ -92,22 +104,20 @@ script.on_event(defines.events.on_robot_pre_mined, function(event)
 			tank_had_fluid = true
 			entity_transfer = MyEntity:new()
 			entity_transfer:copy(entity)
-			game.players[1].print(entity_transfer.name..entity_transfer.fluidbox.type)
+			game.players[1].print(entity_transfer.name..', '..entity_transfer.fluidbox.type..', '..entity_transfer.fluidbox.amount)
 		end
 		entity.fluidbox[1] = nil
 	else tank_had_fluid = false end
 end)
-
 script.on_event(defines.events.on_robot_mined, function(event)
-	local item = event.robot.get_inventory(1)[1]
-	local inv = event.robot.get_inventory(1)
-	for k, v in pairs(inv.get_contents()) do
-		game.players[1].print('name = '..k..', count = '..v)
-	end
+	local item = event.item_stack
+	game.players[1].print('Picked up item stack of '..item.name..' #'..item.count)
 	if tank_had_fluid and item then
 		local itemStack = {}
-		itemStack.name = entity_transfer.fluidbox.type.."-storage-tank"
+		itemStack.name = "storage-tank-"..entity_transfer.fluidbox.type
 		itemStack.count = 1
+		game.players[1].print('Created item stack of '..itemStack.name..' #'..itemStack.count)
+		item.clear()
 		game.players[1].print("Replaced "..item.name.." with")
 		item.set_stack(itemStack)
 		item.durability = entity_transfer.fluidbox.amount
