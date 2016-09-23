@@ -47,8 +47,14 @@ function checkInv(inv, name)
 	local name = name or "storage-tank"
 	local item = inv.find_item_stack(name) or nil
 	for i = 1, #inv do
-		if not inv[i].valid_for_read then
-			return true
+		if inv.has_filters() then
+			if (not inv[i].valid_for_read) and (not inv.get_filter(i)) then
+				return true
+			end
+		else
+			if not inv[i].valid_for_read then
+				return true
+			end
 		end
 	end
 	if item then
