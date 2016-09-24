@@ -88,8 +88,8 @@ end)
 script.on_event(defines.events.on_marked_for_deconstruction, function(event)
 	local entity = event.entity
 	local player = game.players[event.player_index]
-	local fluid = entity.fluidbox[1]
-	if entity.name == "storage-tank" and fluid and math.floor(fluid.amount) > 0 then
+	if entity.name == "storage-tank" and entity.fluidbox[1] and math.floor(entity.fluidbox[1].amount) > 0 then
+		local fluid = entity.fluidbox[1]
 		entity.cancel_deconstruction(player.force)
 		player.print(string.format("Cannot deconstruct: Storage Tank has %d units of %s.", fluid.amount, fluid.type))
 	end
