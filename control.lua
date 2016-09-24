@@ -163,7 +163,7 @@ end)
 script.on_event(defines.events.on_gui_click, function(event)
 	local player = game.players[event.player_index]
 	local element = event.element
-	if player.opened.name == "storage-tank" and element.name == "dump" then -- if this is the correct gui button
+	if player.opened and player.opened.name == "storage-tank" and element.name == "dump" then -- if this is the correct gui button
 		player.opened.fluidbox[1] = nil -- delete storage tank contents
 	end
 end)
