@@ -1,6 +1,6 @@
 # Better Storage Tanks
 
-**Version: 0.3.4**
+**Version: 0.3.5**
 
 **Short description:**
 
@@ -23,3 +23,4 @@ Now there is also a GUI button that dumps all contents of the storage tank.
  - 0.3.2 Removed some silly code. Bots can't mine non-empty tanks anymore.
  - 0.3.3 Added new data table, it should prevent issues with multiplayer (if there was any).
  - 0.3.4 Fixed an error on deconstruction "Passed index is out of range".
+ - 0.3.5 Fixed an error on GUI click "Attempt to index field 'opened' (a nil value)".
